@@ -1,0 +1,81 @@
+body { 
+    font: 13px/140% Arial, sans-serif; 
+    background: black; 
+    color: white; 
+    overflow: hidden; 
+}
+
+a {
+    color: inherit;
+    cursor: pointer; 
+}
+
+img { 
+    display: none; 
+}
+
+ul { 
+    padding: 0 0 0 20px; 
+}
+
+h1 { 
+    font: bold italic 30px/30px Georgia;
+    text-align: center;
+}
+
+h2 { 
+    font: bold italic 17px/17px Georgia;
+    padding-top: 10px; 
+}
+
+small {
+    display: block; 
+    font-size: 11px; 
+    line-height: 15px; 
+}
+
+canvas { 
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    height: 80vh;
+    box-shadow: 0 0 1px rgba(255, 255, 255, 0.30), 0 1px 1px rgba(255, 255, 255, 0.4);
+    transition: 0.2s;
+    border-radius: 9px;
+}
+
+#settings { 
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 20%;
+    padding-right: 20px;
+    padding: 10px;
+    max-width: 19%;
+    transition: 0.2s;
+}
+
+#loading { 
+    position: absolute;
+    left: 0;
+    top: 50%;
+    right: 300px;
+    text-align: center;
+    margin-top: -8px; 
+}
+
+#commands { 
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    text-align: left;
+    padding: 10px;
+    margin: 10px;
+}
+
+@media (max-width: 600px) {
+  small { font-size: 8px; line-height: 10px; }
+  #help { width: 100px; font-size: 10px; line-height: 12px; }
+}
