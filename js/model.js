@@ -131,6 +131,7 @@ function drawModel(model) {
 //
 
 
+// Crea più copie di un certo modello
 function createModelCopies(modelPath, modelList, minCopies, maxCopies) {
 
     // Numero di copie del modello
@@ -138,18 +139,16 @@ function createModelCopies(modelPath, modelList, minCopies, maxCopies) {
 
     for (let i = 0; i < numCopies; i++) {
         let posX = Math.random() * 20 - 10; // Distribuzione casuale tra -10 e +10
-        let posY = 0;                      // Altezza fissa, assumendo un terreno piatto
+        let posY = 0;                       // Altezza fissa, assumendo un terreno piatto
         let posZ = Math.random() * 20 - 10; // Distribuzione casuale tra -10 e +10
-        let rotY = Math.random() * 360;    // Rotazione casuale da 0 a 360 gradi
-
-        let scale = Math.random() * 0.3 + 0.7; // Scala casuale tra 0.7 e 1.0 per varietà
-        //let scale = 0.5 + Math.random() * 0.5; // Scala casuale tra 0.5 e 1.0
+        let rotY = Math.random() * 360;     // Rotazione casuale da 0 a 360 gradi
+        //let scale = Math.random() * (scaleMax - scaleMin) + scaleMin; // Scala variabile tra scaleMin e scaleMax
 
         let model = new Model(
             modelPath,
             [posX, posY, posZ],
             [0, rotY, 0],
-            [scale, scale, scale] // Scala uniforme per mantenere le proporzioni
+            [1.0, 1.0, 1.0]
         );
         modelList.push(model);
     }
@@ -167,9 +166,8 @@ function createModels(minSkeleton, maxSkeleton, minTombstone, maxTombstone, minT
     createModelCopies('assets/models/tree/tree.obj', modelList, minTree, maxTree);
 
     // Calcola il numero totale di scheletri da creare
-    const totalSkeletons = Math.floor(Math.random() * (maxSkeleton - minSkeleton + 1)) + minSkeleton;
-
     // Distribuisci i scheletri tra i due modelli
+    const totalSkeletons = Math.floor(Math.random() * (maxSkeleton - minSkeleton + 1)) + minSkeleton;
     let skeleton1Count, skeleton2Count;
     skeleton1Count = Math.floor(totalSkeletons / 2); // La metà al primo modello
     skeleton2Count = totalSkeletons - skeleton1Count; // Il resto al secondo modello

@@ -110,7 +110,7 @@ function loadMeshFromOBJ(mesh) {
 function loadMesh(mesh) {
 
     retrieveDataFromSource(mesh);
-    Unitize(mesh.data);
+    //Unitize(mesh.data); // Per normalizzare
 
     // Ora che ho la mesh e il/i materiali associati, mi occupo di caricare
     // la/le texture che tali materiali contengono

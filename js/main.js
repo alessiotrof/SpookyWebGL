@@ -24,6 +24,8 @@ function main() {
     // Inizializza lo Skybox
     initSkybox();
 
+    console.log(document.getElementById('minSkeletonNumber').value);
+
     // Caricamento e configurazione delle mesh
     // createModels(minSkeleton, maxSkeleton, minTombstone, maxTombstone, minTree, maxTree) 
     modelList = createModels(
