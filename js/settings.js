@@ -1,6 +1,8 @@
 // Ottieni i valori dei numeri dagli input
 const minSkeletonInput = document.getElementById('minSkeletonNumber');
 const maxSkeletonInput = document.getElementById('maxSkeletonNumber');
+const minGhostInput = document.getElementById('minGhostNumber');
+const maxGhostInput = document.getElementById('maxGhostNumber');
 const minTombstoneInput = document.getElementById('minTombstoneNumber');
 const maxTombstoneInput = document.getElementById('maxTombstoneNumber');
 const minTreeInput = document.getElementById('maxTreeNumber');
@@ -14,6 +16,8 @@ function processNumbers() {
     // Ottengo i valori
     let minSkeletonNumber = parseInt(minSkeletonInput.value, 10);
     let maxSkeletonNumber = parseInt(maxSkeletonInput.value, 10);
+    let minGhostNumber = parseInt(minGhostInput.value, 10);
+    let maxGhostNumber = parseInt(maxGhostInput.value, 10);
     let minTombstoneNumber = parseInt(minTombstoneInput.value, 10);
     let maxTombstoneNumber = parseInt(maxTombstoneInput.value, 10);
     let minTreeNumber = parseInt(minTreeInput.value, 10);
@@ -21,17 +25,19 @@ function processNumbers() {
     let cameraFov = parseInt(cameraFovInput.value, 10);
 
     // Passa i numeri a una funzione
-    handleNumbers(minSkeletonNumber, maxSkeletonNumber, minTombstoneNumber, maxTombstoneNumber, minTreeNumber, maxTreeNumber, cameraFov);
+    handleNumbers(minSkeletonNumber, maxSkeletonNumber, minGhostNumber, maxGhostNumber, minTombstoneNumber, maxTombstoneNumber, minTreeNumber, maxTreeNumber, cameraFov);
 }
 
-function handleNumbers(minSkeletonNumber, maxSkeletonNumber, minTombstoneNumber, maxTombstoneNumber, minTreeNumber, maxTreeNumber, cameraFov) {
+function handleNumbers(minSkeletonNumber, maxSkeletonNumber, minGhostNumber, maxGhostNumber, minTombstoneNumber, maxTombstoneNumber, minTreeNumber, maxTreeNumber, cameraFov) {
 
     // Stampa i risultati nella console (puoi modificarlo per mostrare i risultati nella pagina)
-    alert("Le impostazioni sono state applicate!");
+    alert("Impostazioni applicate!");
 
     // Stampa i valori nella console
     console.log('Numero minimo scheletri:', minSkeletonNumber);
     console.log('Numero massimo scheletri:', maxSkeletonNumber);
+    console.log('Numero minimo fantasmi:', minGhostNumber);
+    console.log('Numero massimo fantasmi:', maxGhostNumber);
     console.log('Numero minimo tombe:', minTombstoneNumber);
     console.log('Numero massimo tombe:', maxTombstoneNumber);
     console.log('Numero minimo alberi:', minTreeNumber);
@@ -40,7 +46,7 @@ function handleNumbers(minSkeletonNumber, maxSkeletonNumber, minTombstoneNumber,
 
     
     // Caricamento e configurazione delle mesh
-    modelList = createModels(maxSkeletonNumber, minSkeletonNumber, maxTombstoneNumber, minTombstoneNumber, minTreeNumber, maxTreeNumber);
+    modelList = createModels(maxSkeletonNumber, minSkeletonNumber, minGhostNumber, maxGhostNumber, maxTombstoneNumber, minTombstoneNumber, minTreeNumber, maxTreeNumber);
     fov = cameraFov;
 
 }

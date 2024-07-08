@@ -107,7 +107,7 @@ class Camera {
 function initCamera() {
 
     // X, Y, Z
-    let position = [3, 0, 0];
+    let position = [3, 1, 0];
     let up = [0, 1, 0];
     let lookAt = [0, 0, 0];
 

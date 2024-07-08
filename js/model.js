@@ -99,6 +99,11 @@ function drawModel(model) {
     gl.uniform3fv(gl.getUniformLocation(program, "emissive"), model.emissive);
     gl.uniform1f(gl.getUniformLocation(program, "shininess"), model.shininess);
     gl.uniform1f(gl.getUniformLocation(program, "opacity"), model.opacity);
+    if(model.sourceMesh.includes("ghost")) {
+        gl.uniform1f(gl.getUniformLocation(program, "uAlpha"), 0.4);
+    } else {
+        gl.uniform1f(gl.getUniformLocation(program, "uAlpha"), 1.0);
+    }
 
 
     // Bind position buffer
@@ -130,34 +135,85 @@ function drawModel(model) {
 // Funzioni per il caricamento dei modelli
 //
 
+// Funzione che verifica se due modelli si sovrappongono
+function checkCollision(newModel, existingModels) {
 
-// Crea più copie di un certo modello
-function createModelCopies(modelPath, modelList, minCopies, maxCopies) {
+    const threshold = 3.0; // Distanza minima tra i centri dei modelli per evitare collisioni
 
-    // Numero di copie del modello
-    const numCopies = Math.floor(Math.random() * (maxCopies - minCopies + 1)) + minCopies;
+    for (let model of existingModels) {
+        let distX = Math.abs(newModel.position[0] - model.position[0]);
+        let distZ = Math.abs(newModel.position[2] - model.position[2]);
 
-    for (let i = 0; i < numCopies; i++) {
-        let posX = Math.random() * 20 - 10; // Distribuzione casuale tra -10 e +10
-        let posY = 0;                       // Altezza fissa, assumendo un terreno piatto
-        let posZ = Math.random() * 20 - 10; // Distribuzione casuale tra -10 e +10
-        let rotY = Math.random() * 360;     // Rotazione casuale da 0 a 360 gradi
-        //let scale = Math.random() * (scaleMax - scaleMin) + scaleMin; // Scala variabile tra scaleMin e scaleMax
-
-        let model = new Model(
-            modelPath,
-            [posX, posY, posZ],
-            [0, rotY, 0],
-            [1.0, 1.0, 1.0]
-        );
-        modelList.push(model);
+        if (distX < threshold && distZ < threshold) {
+            return true; // Collisione rilevata
+        }
     }
 
-
+    return false; // Nessuna collisione
 }
 
-function createModels(minSkeleton, maxSkeleton, minTombstone, maxTombstone, minTree, maxTree) {
+// Modifica la funzione per creare copie dei modelli con controllo delle collisioni
+function createModelCopies(modelPath, modelList, minCopies, maxCopies) {
+
+    const numCopies = Math.floor(Math.random() * (maxCopies - minCopies + 1)) + minCopies;
+    const maxAttempts = 50;
+
+    console.log(modelPath + ": numero copie " + minCopies);
+
+    for (let i = 0; i < numCopies; i++) {
+
+        let attempts = 0;
+        let collision;
+        let newModel;
+
+        do {
+            let posX = Math.random() * 20 - 10;
+            let posY = 0;
+            let posZ = Math.random() * 20 - 10;
+            let rotY = Math.random() * 360;
+            
+            newModel = new Model(
+                modelPath,
+                [posX, posY, posZ],
+                [0, rotY, 0],
+                [1.0, 1.0, 1.0]
+            );
+            collision = checkCollision(newModel, modelList);
+            if (!collision) {
+                modelList.push(newModel);
+                break;
+            }
+            attempts++;
+        } while (collision && attempts < maxAttempts); // Tentativi limitati per evitare cicli infiniti
+
+        if (attempts >= maxAttempts && collision) {
+            console.error("Non è stato possibile posizionare il modello " + modelPath + " senza collisioni dopo " + maxAttempts + " tentativi. Il suo posizionamento sarà casuale!");
+            modelList.push(newModel); // Aggiungo il modello anche se c'è collisione
+        }
+    }
+}
+
+function createModels(minSkeleton, maxSkeleton, minGhost, maxGhost, minTombstone, maxTombstone, minTree, maxTree) {
+
     let modelList = [];
+
+    // Creo il terreno (unico)
+    let terrain = new Model(
+        'assets/models/terrain/terrain.obj',
+        [0, 0, 0],
+        [0, 0, 0],
+        [1.0, 1.0, 1.0]
+    );
+    modelList.push(terrain);
+
+    // Creo il landscape (unico)
+    let landscape = new Model(
+        'assets/models/landscape/landscape.obj',
+        [0, 0, 0],
+        [0, 0, 0],
+        [1.0, 1.0, 1.0]
+    );
+    modelList.push(landscape);
     
     // Creo più copie delle tombe
     createModelCopies('assets/models/tombstone/tombstone.obj', modelList, minTombstone, maxTombstone);
@@ -165,16 +221,17 @@ function createModels(minSkeleton, maxSkeleton, minTombstone, maxTombstone, minT
     // Creo più copie degli alberi
     createModelCopies('assets/models/tree/tree.obj', modelList, minTree, maxTree);
 
+    // Creo più copie dei fantasmi
+    createModelCopies('assets/models/ghost/ghost.obj', modelList, minGhost, maxGhost);
+
     // Calcola il numero totale di scheletri da creare
     // Distribuisci i scheletri tra i due modelli
     const totalSkeletons = Math.floor(Math.random() * (maxSkeleton - minSkeleton + 1)) + minSkeleton;
     let skeleton1Count, skeleton2Count;
     skeleton1Count = Math.floor(totalSkeletons / 2); // La metà al primo modello
     skeleton2Count = totalSkeletons - skeleton1Count; // Il resto al secondo modello
-
-    // Creo più copie degli scheletri per ciascun modello
     createModelCopies('assets/models/skeleton1/skeleton1.obj', modelList, skeleton1Count, skeleton1Count);
     createModelCopies('assets/models/skeleton2/skeleton2.obj', modelList, skeleton2Count, skeleton2Count);
-
+    
     return modelList;
 }

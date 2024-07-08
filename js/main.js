@@ -13,7 +13,7 @@ function main() {
     initWebGL();
     if (!gl) { // Errore
         alert("Errore: WebGL non è stato correttamente inizializato!");
-        console.log("Errore: WebGL non è stato correttamente inizializato!");
+        console.error("Errore: WebGL non è stato correttamente inizializato!");
         return; 
     }
 
@@ -27,10 +27,12 @@ function main() {
     console.log(document.getElementById('minSkeletonNumber').value);
 
     // Caricamento e configurazione delle mesh
-    // createModels(minSkeleton, maxSkeleton, minTombstone, maxTombstone, minTree, maxTree) 
+    // function createModels(minSkeleton, maxSkeleton, minGhost, maxGhost, minTombstone, maxTombstone, minTree, maxTree)
     modelList = createModels(
         parseInt(document.getElementById('minSkeletonNumber').value, 10),
         parseInt(document.getElementById('maxSkeletonNumber').value, 10),
+        parseInt(document.getElementById('minGhostNumber').value, 10),
+        parseInt(document.getElementById('maxGhostNumber').value, 10),
         parseInt(document.getElementById('minTombstoneNumber').value, 10),
         parseInt(document.getElementById('maxTombstoneNumber').value, 10),
         parseInt(document.getElementById('minTreeNumber').value, 10),
@@ -82,7 +84,6 @@ function initWebGL() {
 function setupSkyboxProgram() {
     skyboxProgram = webglUtils.createProgramFromScripts(gl, ["skybox-vertex-shader", "skybox-fragment-shader"]);
     //gl.useProgram(skyboxProgram);
-   
 }
 
 
@@ -181,5 +182,4 @@ function renderLoop() {
 
 // Inizializzo WebGL all'avvio
 window.onload = main;
-
 

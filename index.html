@@ -8,6 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
 
+    <!-- FavIcon-->
+    <link rel="icon" type="image/x-icon" href="./assets/icons/favicon.png">
+
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="style.css">
 
@@ -57,6 +60,7 @@
         uniform vec3 u_ambientLight;
         uniform vec3 u_colorLight;
         uniform sampler2D diffuseMap;
+        uniform float uAlpha; // Aggiunta
 
         void main () {
             vec3 normal = normalize(v_normal);
@@ -72,11 +76,12 @@
             float effectiveOpacity = opacity * diffuseMapColor.a;
 
             gl_FragColor = vec4(
-            emissive +
-            ambient * u_ambientLight +
-            effectiveDiffuse * fakeLight +
-            specular * pow(specularLight, shininess),
-            effectiveOpacity);
+                emissive +
+                ambient * u_ambientLight +
+                effectiveDiffuse * fakeLight +
+                specular * pow(specularLight, shininess),
+                uAlpha * effectiveOpacity // Aggiunta
+            );
         }
     </script>
 
@@ -132,27 +137,34 @@
             <form id="settingsForm">
 
                 <h3>Grafica</h3>
-                <b>Ombre:</b>
-                <input type="checkbox" id="shadows" name="shadows" value="shadows" unchecked>
-                <label id="shadows"></label>
+                <label for="ombre">Ombre:</label>
+                <input type="checkbox" id="ombre" name="ombre" value="ombre" unchecked> <br> 
                 <b>Luce: </b> <br>
                 TODO
 
                 <h3>Paesaggio</h3>
                 Numero di Scheletri: <br>
                 <label for="minSkeletonNumber">Min:</label>
-                <input type="range" id="minSkeletonNumber" name="minSkeletonNumber" min="1" max="10" value="5"  step="1" oninput="this.nextElementSibling.value = this.value">
+                <input type="range" id="minSkeletonNumber" name="minSkeletonNumber" min="1" max="10" value="2"  step="1" oninput="this.nextElementSibling.value = this.value">
                 <output>5</output><br><br>
                 <label for="maxSkeletonNumber">Max:</label>
-                <input type="range" id="maxSkeletonNumber" name="maxSkeletonNumber" min="1" max="20" value="10"  step="1" oninput="this.nextElementSibling.value = this.value">
+                <input type="range" id="maxSkeletonNumber" name="maxSkeletonNumber" min="10" max="20" value="10"  step="1" oninput="this.nextElementSibling.value = this.value">
+                <output>10</output><br><br>
+
+                Numero di Fantasmi: <br>
+                <label for="minGhostNumber">Min:</label>
+                <input type="range" id="minGhostNumber" name="minGhostNumber" min="1" max="10" value="2"  step="1" oninput="this.nextElementSibling.value = this.value">
+                <output>5</output><br><br>
+                <label for="maxGhostNumber">Max:</label>
+                <input type="range" id="maxGhostNumber" name="maxGhostNumber" min="10" max="20" value="10"  step="1" oninput="this.nextElementSibling.value = this.value">
                 <output>10</output><br><br>
                 
                 Numero di Tombe: <br>
                 <label for="minTombstoneNumber">Min:</label>
-                <input type="range" id="minTombstoneNumber" name="minTombstoneNumber" min="1" max="15" value="10"  step="1" oninput="this.nextElementSibling.value = this.value">
+                <input type="range" id="minTombstoneNumber" name="minTombstoneNumber" min="1" max="15" value="5"  step="1" oninput="this.nextElementSibling.value = this.value">
                 <output>10</output><br><br>
                 <label for="maxTombstoneNumber">Max:</label>
-                <input type="range" id="maxTombstoneNumber" name="maxTombstoneNumber" min="1" max="20" value="15"  step="1" oninput="this.nextElementSibling.value = this.value">
+                <input type="range" id="maxTombstoneNumber" name="maxTombstoneNumber" min="15" max="20" value="15"  step="1" oninput="this.nextElementSibling.value = this.value">
                 <output>15</output><br><br>
 
                 Numero di Alberi: <br>
@@ -160,7 +172,7 @@
                 <input type="range" id="minTreeNumber" name="minTreeNumber" min="1" max="10" value="5"  step="1" oninput="this.nextElementSibling.value = this.value">
                 <output>5</output><br><br>
                 <label for="maxTreeNumber">Max:</label>
-                <input type="range" id="maxTreeNumber" name="maxTreeNumber" min="1" max="15" value="10"  step="1" oninput="this.nextElementSibling.value = this.value">
+                <input type="range" id="maxTreeNumber" name="maxTreeNumber" min="10" max="15" value="10"  step="1" oninput="this.nextElementSibling.value = this.value">
                 <output>10</output><br><br>
                 
                 <h3>Camera</h3>
@@ -178,10 +190,10 @@
     <div id="commands">
         <h2>Comandi</h2>
         <ul>
-            <li><b>W/S:</b> avanti/indietro</li>
-            <li><b>A/D:</b> destra/sinistra</li>
-            <li><b>Q/E:</b> su/giù</li>
-            <li><b>Freccia su/giù: </b> inclinazione camera</li>
+            <li><b>W/S:</b> movimento avanti/indietro</li>
+            <li><b>A/D:</b> movimento destra/sinistra</li>
+            <li><b>Q/E:</b> spostamento su/giù</li>
+            <li><b>Freccia su/giù: </b> inclinazione camera su/giù</li>
             <li><b>Freccia destra/sinistra:</b> rotazione camera</li>
             <li><b>R:</b> reset camera</li>
         </ul>

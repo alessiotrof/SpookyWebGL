@@ -35,12 +35,12 @@ function handleMouseDown(e) {
     mouse.oldX = e.pageX;
     mouse.oldY = e.pageY;
     e.preventDefault();
-    console.log("Pressed a mouse button!");
+    //console.log("Pressed a mouse button!");
 }
 
 function handleMouseUp() {
     mouse.drag = false;
-    console.log("Released a mouse button!");
+    //console.log("Released a mouse button!");
 }
 
 function handleMouseMove(e) {
@@ -106,53 +106,53 @@ function moveCameraWithKeyboard() {
 
     // Movimento normale
     if (keys["w"]) {
-        console.log("Premuto W");
+        //console.log("Premuto W");
         camera.moveForward(speed);
     }
     if (keys["s"]) {
-        console.log("Premuto S");
+        //console.log("Premuto S");
         camera.moveForward(-speed);
     }
     if (keys["a"]) {
-        console.log("Premuto A");
+        //console.log("Premuto A");
         camera.moveRight(-speed);
     }
     if (keys["d"]) {
-        console.log("Premuto D");
+        //console.log("Premuto D");
         camera.moveRight(speed);
     }
 
     // Su/Giù
     if (keys["q"]) {
-        console.log("Premuto Q");
+        //console.log("Premuto Q");
         camera.moveUp(speed);
     }
     if (keys["e"]) {
-        console.log("Premuto E");
+        //console.log("Premuto E");
         camera.moveUp(-speed);
     }
 
     // Rotazione
     if (keys["ArrowUp"]) {
-        console.log("Premuto Freccia Su");
+        //console.log("Premuto Freccia Su");
         camera.rotateUp(speed*0.5);
     }
     if (keys["ArrowDown"]) {
-        console.log("Premuto Freccia Giù");
+        //console.log("Premuto Freccia Giù");
         camera.rotateUp(-speed*0.5);
     }
     if (keys["ArrowLeft"]) {
-        console.log("Premuto Freccia Sinistra");
+        //console.log("Premuto Freccia Sinistra");
         camera.rotateLeft(speed*0.5);
     }
     if (keys["ArrowRight"]) {
-        console.log("Premuto Freccia Destra");
+        //console.log("Premuto Freccia Destra");
         camera.rotateLeft(-speed*0.5);
     }
 
     // Reset
     if (keys["r"]) {
-        console.log("Premuto R");
+        //console.log("Premuto R");
         camera.reset();
     }
 }
