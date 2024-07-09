@@ -14,7 +14,23 @@ function isPowerOf2(value) {
     return (value & (value - 1)) === 0;
 }
 
+// Converti il valore hex del color picker in un array RGB normalizzato
+function hexToRgbArray(hex) {
 
+    const bigint = parseInt(hex.slice(1), 16);
+    const r = ((bigint >> 16) & 255) / 255;
+    const g = ((bigint >> 8) & 255) / 255;
+    const b = (bigint & 255) / 255;
+
+    return [r, g, b]; // Per il colorpicker 
+}
+
+function rgbToHex(rgb) {
+    return '#' + rgb.map(function(value) {
+        const hex = Math.round(value * 255).toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+    }).join('');
+}
 
 function resizeCanvasToDisplaySize() {
 

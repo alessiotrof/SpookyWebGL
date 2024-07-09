@@ -19,12 +19,17 @@ ul {
 }
 
 h1 { 
-    font: bold italic 30px/30px Georgia;
+    font: bold italic 30px/30px Helvetica, sans-serif;
     text-align: center;
 }
 
 h2 { 
-    font: bold italic 17px/17px Georgia;
+    font: bold italic 17px/17px Helvetica, sans-serif;
+    padding-top: 10px; 
+}
+
+h3 { 
+    font: bold italic 15px/15px Helvetica, sans-serif;
     padding-top: 10px; 
 }
 
@@ -45,6 +50,7 @@ canvas {
     border-radius: 9px;
 }
 
+
 #settings { 
     position: absolute;
     top: 0;
@@ -57,6 +63,7 @@ canvas {
     transition: 0.2s;
 }
 
+
 #loading { 
     position: absolute;
     left: 0;
@@ -66,14 +73,27 @@ canvas {
     margin-top: -8px; 
 }
 
-#commands { 
+
+#bottom-container {
+    display: flex;  /* Utilizza Flexbox per organizzare i contenuti in linea orizzontale */
+    justify-content: space-around;  /* Distribuisce lo spazio rimanente intorno agli elementi */
     position: absolute;
-    left: 0;
     bottom: 0;
-    text-align: left;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+}
+
+#graphics, #commands, #camera {
+    width: 50%;  /* Imposta una larghezza adeguata per i div */
     padding: 10px;
     margin: 10px;
+    
+    /* box-sizing: border-box; */  /* Include padding e border nella larghezza e altezza totali */
+    /* background-color: #222; */  /* Colore di sfondo per distinguere i div */
+    /* border: 1px solid #444; */  /* Bordo per distinguere i div */
 }
+
 
 @media (max-width: 600px) {
   small { font-size: 8px; line-height: 10px; }

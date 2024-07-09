@@ -80,7 +80,7 @@ class Camera {
 
     // Per resettare la posizione della camera
     reset() {
-        this.position = [0, 0, 0];
+        //this.position = [0, 1, 0]; // Non resetto la posizione ma soltanto l'inclinazione
         this.forward = [0, 0, -1];
         this.right = m4.normalize(m4.cross(this.forward, this.up));
         this.up = [0, 1, 0];
@@ -110,8 +110,6 @@ function initCamera() {
     let position = [3, 1, 0];
     let up = [0, 1, 0];
     let lookAt = [0, 0, 0];
-
-    fov = parseInt(document.getElementById('cameraFov').value, 10);
 
     // Inizializzazione della camera
     camera = new Camera(position, lookAt, up);

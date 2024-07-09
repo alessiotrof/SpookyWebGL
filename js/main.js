@@ -5,7 +5,7 @@
 var gl, program, skyboxProgram, canvas;
 
 // Per le impostazioni
-var camera, modelList = [], fov;
+var camera, modelList = [];
 
 function main() {
 
@@ -41,9 +41,6 @@ function main() {
 
     // Inizializzo la camera
     initCamera();
-
-    // Impostazione delle uniform
-    setupLights();
 
     // Inizializzo i controlli
     initControls();
@@ -93,21 +90,24 @@ function setupProgram() {
 }
 
 
-function setupLights() {
 
-    // Luce ambientale molto bassa per una scena notturna
-    const ambientLight = [0.05, 0.05, 0.1]; // Blu molto scuro
+function updateLights() {
+   
+    gl.uniform3fv(gl.getUniformLocation(program, "u_ambientLight"),  
+        hexToRgbArray(document.getElementById('ambientLightColorPicker').value)
+    );
 
-    // Colore della luce freddo, simula il chiaro di luna
-    const colorLight = [0.6, 0.7, 0.9]; // Blu chiaro/grigio
+    gl.uniform3fv(gl.getUniformLocation(program, "u_colorLight"), 
+        hexToRgbArray(document.getElementById('directionalLightColorPicker').value)
+    );
 
-    // Direzione della luce come se provenisse dalla luna
-    // Ad esempio, dall'alto verso il basso e da un angolo, simula una luna alta nel cielo
-    const lightDirection = m4.normalize([0.5, -1, 0.5]);
-
-    gl.uniform3fv(gl.getUniformLocation(program, "u_ambientLight"), ambientLight);
-    gl.uniform3fv(gl.getUniformLocation(program, "u_colorLight"), colorLight);
-    gl.uniform3fv(gl.getUniformLocation(program, "u_lightDirection"), lightDirection);
+    gl.uniform3fv(gl.getUniformLocation(program, "u_lightDirection"), m4.normalize(  
+        [
+            parseFloat(document.getElementById('directionalLightX').value),
+            parseFloat(document.getElementById('directionalLightY').value),
+            parseFloat(document.getElementById('directionalLightZ').value),
+        ]
+     ));
 }
 
 
@@ -126,18 +126,19 @@ function createCameraViewMatrix() {
     return viewMatrix;
 }
 
-function createProjectionMatrix(fov) {
+function createProjectionMatrix() {
 
     // Calcola la matrice di proiezione prospettica
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     const zmin = 0.1;
-    const fieldOfViewRadians = degToRad(fov);
+    const fieldOfViewRadians = degToRad(parseInt(document.getElementById('cameraFov').value, 10)); // Presa da input
 
     // Creazione della ProjectionMatrix
     const projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zmin, 200); // Var globale
     const projectionMatrixLocation = gl.getUniformLocation(program, "u_projection");
     gl.uniformMatrix4fv(projectionMatrixLocation, false, projectionMatrix);
 
+    
     return projectionMatrix;
 }
 
@@ -152,9 +153,12 @@ function renderLoop() {
     gl.clearColor(0, 0, 0, 0);
 
 
+    // Per aggiornare le luci nella scena
+    updateLights();
+
     // Skybox
     const viewMatrix = createCameraViewMatrix();
-    const projectionMatrix = createProjectionMatrix(fov);
+    const projectionMatrix = createProjectionMatrix();
     drawSkybox(skybox, viewMatrix, projectionMatrix);
 
     // Attiva il programma principale
@@ -176,7 +180,6 @@ function renderLoop() {
 
     // Richiede il prossimo frame
     requestAnimationFrame(renderLoop);
-
 }
 
 

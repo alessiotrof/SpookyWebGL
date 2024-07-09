@@ -99,7 +99,7 @@ function drawModel(model) {
     gl.uniform3fv(gl.getUniformLocation(program, "emissive"), model.emissive);
     gl.uniform1f(gl.getUniformLocation(program, "shininess"), model.shininess);
     gl.uniform1f(gl.getUniformLocation(program, "opacity"), model.opacity);
-    if(model.sourceMesh.includes("ghost")) {
+    if(model.sourceMesh.includes("ghost")) { // Trasparenza
         gl.uniform1f(gl.getUniformLocation(program, "uAlpha"), 0.4);
     } else {
         gl.uniform1f(gl.getUniformLocation(program, "uAlpha"), 1.0);
@@ -135,16 +135,19 @@ function drawModel(model) {
 // Funzioni per il caricamento dei modelli
 //
 
+
 // Funzione che verifica se due modelli si sovrappongono
 function checkCollision(newModel, existingModels) {
 
-    const threshold = 3.0; // Distanza minima tra i centri dei modelli per evitare collisioni
+    // Distanza minima tra i centri dei modelli per evitare collisioni
+    const threshold = 3.0; 
 
     for (let model of existingModels) {
-        let distX = Math.abs(newModel.position[0] - model.position[0]);
-        let distZ = Math.abs(newModel.position[2] - model.position[2]);
+        let distX = newModel.position[0] - model.position[0];
+        let distZ = newModel.position[2] - model.position[2];
+        let distance = Math.sqrt(distX * distX + distZ * distZ);
 
-        if (distX < threshold && distZ < threshold) {
+        if (distance < threshold) {
             return true; // Collisione rilevata
         }
     }
@@ -152,25 +155,25 @@ function checkCollision(newModel, existingModels) {
     return false; // Nessuna collisione
 }
 
-// Modifica la funzione per creare copie dei modelli con controllo delle collisioni
+// Funzione per creare copie dei modelli con controllo delle collisioni
 function createModelCopies(modelPath, modelList, minCopies, maxCopies) {
 
     const numCopies = Math.floor(Math.random() * (maxCopies - minCopies + 1)) + minCopies;
-    const maxAttempts = 50;
+    const maxAttempts = 40;
+    const placementRange = 26; // In questo caso c'è un range che va da 0 a 28
 
     console.log(modelPath + ": numero copie " + minCopies);
 
     for (let i = 0; i < numCopies; i++) {
-
         let attempts = 0;
         let collision;
         let newModel;
 
         do {
-            let posX = Math.random() * 20 - 10;
+            let posX = Math.random() * placementRange - (placementRange / 2);  // Range tra [-13, 13]
             let posY = 0;
-            let posZ = Math.random() * 20 - 10;
-            let rotY = Math.random() * 360;
+            let posZ = Math.random() * placementRange - (placementRange / 2);  // Range tra [-13, 13]
+            let rotY = Math.random() * 360;                                    // Range [0, 360]
             
             newModel = new Model(
                 modelPath,
@@ -178,11 +181,13 @@ function createModelCopies(modelPath, modelList, minCopies, maxCopies) {
                 [0, rotY, 0],
                 [1.0, 1.0, 1.0]
             );
+
             collision = checkCollision(newModel, modelList);
             if (!collision) {
                 modelList.push(newModel);
                 break;
             }
+
             attempts++;
         } while (collision && attempts < maxAttempts); // Tentativi limitati per evitare cicli infiniti
 
@@ -192,6 +197,8 @@ function createModelCopies(modelPath, modelList, minCopies, maxCopies) {
         }
     }
 }
+
+
 
 function createModels(minSkeleton, maxSkeleton, minGhost, maxGhost, minTombstone, maxTombstone, minTree, maxTree) {
 
@@ -215,8 +222,8 @@ function createModels(minSkeleton, maxSkeleton, minGhost, maxGhost, minTombstone
     );
     modelList.push(landscape);
     
-    // Creo più copie delle tombe
-    createModelCopies('assets/models/tombstone/tombstone.obj', modelList, minTombstone, maxTombstone);
+    // La mia tomba (unica)
+    createModelCopies('assets/models/people_tombstones/my_tombstone.obj', modelList, 1, 1);
 
     // Creo più copie degli alberi
     createModelCopies('assets/models/tree/tree.obj', modelList, minTree, maxTree);
@@ -224,12 +231,21 @@ function createModels(minSkeleton, maxSkeleton, minGhost, maxGhost, minTombstone
     // Creo più copie dei fantasmi
     createModelCopies('assets/models/ghost/ghost.obj', modelList, minGhost, maxGhost);
 
+
+    // Calcola il numero totale di tombe da creare
+    // Distribuisci i scheletri tra i due modelli
+    const totalTombstones = Math.floor(Math.random() * (maxTombstone - minTombstone + 1)) + minTombstone;
+    let tombstone1Count = Math.floor(totalTombstones / 2); // La metà al primo modello
+    let tombstone2Count = totalTombstones - tombstone1Count; // Il resto al secondo modello
+    createModelCopies('assets/models/tombstone1/tombstone1.obj', modelList, tombstone1Count, tombstone1Count);
+    createModelCopies('assets/models/tombstone2/tombstone2.obj', modelList, tombstone2Count, tombstone2Count);
+
+
     // Calcola il numero totale di scheletri da creare
     // Distribuisci i scheletri tra i due modelli
     const totalSkeletons = Math.floor(Math.random() * (maxSkeleton - minSkeleton + 1)) + minSkeleton;
-    let skeleton1Count, skeleton2Count;
-    skeleton1Count = Math.floor(totalSkeletons / 2); // La metà al primo modello
-    skeleton2Count = totalSkeletons - skeleton1Count; // Il resto al secondo modello
+    let skeleton1Count = Math.floor(totalSkeletons / 2); // La metà al primo modello
+    let skeleton2Count = totalSkeletons - skeleton1Count; // Il resto al secondo modello
     createModelCopies('assets/models/skeleton1/skeleton1.obj', modelList, skeleton1Count, skeleton1Count);
     createModelCopies('assets/models/skeleton2/skeleton2.obj', modelList, skeleton2Count, skeleton2Count);
     

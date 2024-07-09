@@ -131,18 +131,11 @@
 
         <p>Progetto di Alessio Troffei</a>. </p>
 
-        <h2>Impostazioni</h2>
+        <h2>Paesaggio</h2>
         <ul>
         
             <form id="settingsForm">
-
-                <h3>Grafica</h3>
-                <label for="ombre">Ombre:</label>
-                <input type="checkbox" id="ombre" name="ombre" value="ombre" unchecked> <br> 
-                <b>Luce: </b> <br>
-                TODO
-
-                <h3>Paesaggio</h3>
+                
                 Numero di Scheletri: <br>
                 <label for="minSkeletonNumber">Min:</label>
                 <input type="range" id="minSkeletonNumber" name="minSkeletonNumber" min="1" max="10" value="2"  step="1" oninput="this.nextElementSibling.value = this.value">
@@ -175,29 +168,63 @@
                 <input type="range" id="maxTreeNumber" name="maxTreeNumber" min="10" max="15" value="10"  step="1" oninput="this.nextElementSibling.value = this.value">
                 <output>10</output><br><br>
                 
-                <h3>Camera</h3>
-                <label for="cameraFov">FOV:</label>
-                <input type="range" id="cameraFov" name="cameraFov" min="30" max="120" value="60"  step="1" oninput="this.nextElementSibling.value = this.value">
-                <output>60</output><br><br>
 
-                <button type="button" onclick="processNumbers()">Applica</button>
+                <button type="button" onclick="processLandscapeSettings()">Applica</button>
             </form>
         
         </ul>
 
     </div>
 
-    <div id="commands">
-        <h2>Comandi</h2>
-        <ul>
-            <li><b>W/S:</b> movimento avanti/indietro</li>
-            <li><b>A/D:</b> movimento destra/sinistra</li>
-            <li><b>Q/E:</b> spostamento su/giù</li>
-            <li><b>Freccia su/giù: </b> inclinazione camera su/giù</li>
-            <li><b>Freccia destra/sinistra:</b> rotazione camera</li>
-            <li><b>R:</b> reset camera</li>
-        </ul>
+
+    <div id="bottom-container">
+
+        <div id="graphics">
+            <h2>Grafica</h2>
+
+            <label for="ambientLightColorPicker">Ambient Light:</label> 
+            <input type="color" id="ambientLightColorPicker" value="#0D0D1A" /> <br>
+
+            <label for="directionalLightColorPicker">Directional Light:</label> 
+            <input type="color" id="directionalLightColorPicker" value="#99B3E6" /> <br>
+
+            <label for="directionalLightX">Light Direction X</label>
+            <input type="range" id="directionalLightX" min="-1" max="1" step="0.01" value="0.5" oninput="this.nextElementSibling.value = this.value"/> 
+            <output>0.5</output> <br>
+
+            <label for="directionalLightY">Light Direction Y</label>
+            <input type="range" id="directionalLightY" min="-1" max="1" step="0.01" value="-1" oninput="this.nextElementSibling.value = this.value"/> 
+            <output>-1</output> <br>
+
+            <label for="directionalLightZ">Light Direction Z</label>
+            <input type="range" id="directionalLightZ" min="-1" max="1" step="0.01" value="0.5" oninput="this.nextElementSibling.value = this.value"/> 
+            <output>0.5</output> <br>
+
+        </div>
+
+        <div id="camera">
+            <h2>Camera</h2>
+            <label for="cameraFov">FOV:</label>
+            <input type="range" id="cameraFov" name="cameraFov" min="30" max="120" value="60"  step="1" oninput="this.nextElementSibling.value = this.value">
+            <output>60</output><br><br>
+        </div>
+
+        <div id="commands">
+            <h2>Comandi</h2>
+            <ul>
+                <li><b>W/S:</b> movimento avanti/indietro</li>
+                <li><b>A/D:</b> movimento destra/sinistra</li>
+                <li><b>Q/E:</b> spostamento su/giù</li>
+                <li><b>Freccia su/giù: </b> inclinazione camera su/giù</li>
+                <li><b>Freccia destra/sinistra:</b> rotazione camera</li>
+                <li><b>R:</b> reset camera</li>
+            </ul>
+        </div>
+
+  
+
     </div>
+
 
 </body>
 
