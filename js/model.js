@@ -99,8 +99,8 @@ function drawModel(model) {
     gl.uniform3fv(gl.getUniformLocation(program, "emissive"), model.emissive);
     gl.uniform1f(gl.getUniformLocation(program, "shininess"), model.shininess);
     gl.uniform1f(gl.getUniformLocation(program, "opacity"), model.opacity);
-    if(model.sourceMesh.includes("ghost")) { // Trasparenza
-        gl.uniform1f(gl.getUniformLocation(program, "uAlpha"), 0.4);
+    if(model.sourceMesh.includes("ghost") && document.getElementById('transparencyCheckbox').checked) { // Trasparenza
+        gl.uniform1f(gl.getUniformLocation(program, "uAlpha"), 0.35);
     } else {
         gl.uniform1f(gl.getUniformLocation(program, "uAlpha"), 1.0);
     }
@@ -226,11 +226,18 @@ function createModels(minSkeleton, maxSkeleton, minGhost, maxGhost, minTombstone
     createModelCopies('assets/models/people_tombstones/my_tombstone.obj', modelList, 1, 1);
 
     // Creo più copie degli alberi
-    createModelCopies('assets/models/tree/tree.obj', modelList, minTree, maxTree);
+    const totalTrees = Math.floor(Math.random() * (maxTree - minTree + 1)) + minTree;
+    let tree1Count = Math.floor(totalTrees / 2); // La metà al primo modello
+    let tree2Count = totalTrees - tree1Count; // Il resto al secondo modello
+    createModelCopies('assets/models/tree1/tree1.obj', modelList, tree1Count, tree1Count);
+    createModelCopies('assets/models/tree2/tree2.obj', modelList, tree2Count, tree2Count);
 
     // Creo più copie dei fantasmi
-    createModelCopies('assets/models/ghost/ghost.obj', modelList, minGhost, maxGhost);
-
+    const totalGhosts = Math.floor(Math.random() * (maxGhost - minGhost + 1)) + minGhost;
+    let ghost1Count = Math.floor(totalGhosts / 2); // La metà al primo modello
+    let ghost2Count = totalGhosts - ghost1Count; // Il resto al secondo modello
+    createModelCopies('assets/models/ghost1/ghost1.obj', modelList, ghost1Count, ghost1Count);
+    createModelCopies('assets/models/ghost2/ghost2.obj', modelList, ghost2Count, ghost2Count);
 
     // Calcola il numero totale di tombe da creare
     // Distribuisci i scheletri tra i due modelli

@@ -25,12 +25,6 @@ function hexToRgbArray(hex) {
     return [r, g, b]; // Per il colorpicker 
 }
 
-function rgbToHex(rgb) {
-    return '#' + rgb.map(function(value) {
-        const hex = Math.round(value * 255).toString(16);
-        return hex.length === 1 ? '0' + hex : hex;
-    }).join('');
-}
 
 function resizeCanvasToDisplaySize() {
 

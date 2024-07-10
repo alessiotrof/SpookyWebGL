@@ -12,6 +12,8 @@ const minTombstoneInput = document.getElementById('minTombstoneNumber');
 const maxTombstoneInput = document.getElementById('maxTombstoneNumber');
 const minTreeInput = document.getElementById('maxTreeNumber');
 const maxTreeInput = document.getElementById('minTreeNumber');
+const checkboxInput = document.getElementById('transparencyCheckbox');
+
 
 
 // Quando viene premuto il pulsante "Applica"
@@ -28,7 +30,7 @@ function processLandscapeSettings() {
     let maxTreeNumber = parseInt(maxTreeInput.value, 10);
 
     
-    alert("Impostazioni del paesaggio applicate!");
+    alert("Impostazioni sulla generazione del paesaggio applicate!");
 
     // Stampa i valori nella console
     console.log('Numero minimo scheletri:', minSkeletonNumber);
@@ -45,3 +47,15 @@ function processLandscapeSettings() {
     modelList = createModels(maxSkeletonNumber, minSkeletonNumber, minGhostNumber, maxGhostNumber, maxTombstoneNumber, minTombstoneNumber, minTreeNumber, maxTreeNumber);
 }
 
+
+
+function processCheckbox() {
+    
+    if (checkboxInput.checked) {
+      alert('Trasparenza abilitata!');
+      console.log('Trasparenza abilitata!');
+    } else {
+      alert('Trasparenza disabilitata!');
+      console.log('Trasparenza abilitata!');
+    }
+  }

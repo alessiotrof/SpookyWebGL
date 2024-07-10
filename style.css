@@ -1,3 +1,7 @@
+/* -------- */
+/* Elementi */
+/* -------- */
+
 body { 
     font: 13px/140% Arial, sans-serif; 
     background: black; 
@@ -44,14 +48,19 @@ canvas {
     left: 0;
     top: 0;
     z-index: 1;
-    height: 80vh;
+    height: 76vh;
     box-shadow: 0 0 1px rgba(255, 255, 255, 0.30), 0 1px 1px rgba(255, 255, 255, 0.4);
     transition: 0.2s;
+    border: 2px solid white;
     border-radius: 9px;
 }
 
 
-#settings { 
+/* ------------ */
+/* Impostazioni */
+/* ------------ */
+
+#right-panel { 
     position: absolute;
     top: 0;
     right: 0;
@@ -75,17 +84,18 @@ canvas {
 
 
 #bottom-container {
-    display: flex;  /* Utilizza Flexbox per organizzare i contenuti in linea orizzontale */
+    display: flex;                  /* Utilizza Flexbox per organizzare i contenuti in linea orizzontale */
     justify-content: space-around;  /* Distribuisce lo spazio rimanente intorno agli elementi */
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 100%;
+    width: 80%;
     padding: 10px;
 }
 
-#graphics, #commands, #camera {
-    width: 50%;  /* Imposta una larghezza adeguata per i div */
+
+#lights, #graphics, #commands, #camera {
+    width: 30%;  /* Imposta una larghezza adeguata per i div */
     padding: 10px;
     margin: 10px;
     
@@ -93,6 +103,191 @@ canvas {
     /* background-color: #222; */  /* Colore di sfondo per distinguere i div */
     /* border: 1px solid #444; */  /* Bordo per distinguere i div */
 }
+
+
+/* ---------------- */
+/* Elementi grafici */
+/* ---------------- */
+
+
+/* Bottoni */
+
+
+.button {
+    font: bold 15px/15px Helvetica, sans-serif;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: black;
+    border: 2px solid white;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+  
+.button:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+}
+
+
+/* Slider */
+
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: white;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    border-radius: 10px; /* Aggiungi questa linea per i bordi smussati */
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 19px;
+    height: 19px;
+    background: black;
+    border: 2px solid white;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.slider::-moz-range-thumb {
+    width: 19px;
+    height: 19px;
+    background: black;
+    border: 2px solid white;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+
+/* ColorPicker */
+
+
+.color-picker {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 36px;
+    height: 36px;
+    border: 3px solid white;
+    /*background-color: black;*/
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 0;
+}
+
+.color-picker::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
+}
+
+.color-picker::-moz-color-swatch {
+    border: none;
+    border-radius: 50%;
+}
+
+
+/* Checkbox */
+
+
+.checkbox {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    background-color: black;
+    border: 2px solid white;
+    cursor: pointer;
+    border-radius: 50%;
+    position: relative;
+}
+
+.checkbox:checked {
+    background-color: white;
+}
+
+.checkbox:checked::before {
+    content: '';
+    display: block;
+    width: 12px;
+    height: 12px;
+    background-color: black;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+}
+
+
+
+
+/* Bottoni per il movimento */
+#command-buttons {
+    padding: 30px;
+    display: grid;
+    grid-template-columns: 50px 50px 50px;
+    grid-template-rows: 50px 50px;
+    gap: 14px;
+}
+
+.arrow-button {
+    width: 50px;
+    height: 50px;
+    background-color: black;
+    color: white;
+    border: 3px solid white;
+    border-radius: 50%;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.arrow-button:hover {
+    background-color: white;
+    color: black;
+}
+
+#up-button {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#left-button {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+#center-button {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+#right-button {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+#down-button {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+
+
 
 
 @media (max-width: 600px) {

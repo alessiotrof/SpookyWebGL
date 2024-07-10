@@ -24,10 +24,7 @@ function main() {
     // Inizializza lo Skybox
     initSkybox();
 
-    console.log(document.getElementById('minSkeletonNumber').value);
-
     // Caricamento e configurazione delle mesh
-    // function createModels(minSkeleton, maxSkeleton, minGhost, maxGhost, minTombstone, maxTombstone, minTree, maxTree)
     modelList = createModels(
         parseInt(document.getElementById('minSkeletonNumber').value, 10),
         parseInt(document.getElementById('maxSkeletonNumber').value, 10),
@@ -94,11 +91,11 @@ function setupProgram() {
 function updateLights() {
    
     gl.uniform3fv(gl.getUniformLocation(program, "u_ambientLight"),  
-        hexToRgbArray(document.getElementById('ambientLightColorPicker').value)
+        hexToRgbArray(document.getElementById('ambientLightColorPicker').value) // Converto da Hex a RGB
     );
 
     gl.uniform3fv(gl.getUniformLocation(program, "u_colorLight"), 
-        hexToRgbArray(document.getElementById('directionalLightColorPicker').value)
+        hexToRgbArray(document.getElementById('directionalLightColorPicker').value) // Converto da Hex a RGB
     );
 
     gl.uniform3fv(gl.getUniformLocation(program, "u_lightDirection"), m4.normalize(  

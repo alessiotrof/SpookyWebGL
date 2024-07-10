@@ -22,6 +22,13 @@ function initControls() {
     canvas.addEventListener('mouseup', handleMouseUp, false);
     canvas.addEventListener('mousemove', handleMouseMove, false);
     canvas.addEventListener('mouseout', handleMouseUp, false);
+
+    // Event listeners per le frecce a schermo
+    document.getElementById('up-button').addEventListener('click', () => camera.moveForward(0.2));
+    document.getElementById('down-button').addEventListener('click', () => camera.moveForward(-0.2));
+    document.getElementById('left-button').addEventListener('click', () => camera.moveRight(-0.2));
+    document.getElementById('right-button').addEventListener('click', () => camera.moveRight(0.2));
+    document.getElementById('center-button').addEventListener('click', () => camera.reset());
 }
 
 const mouse = {
