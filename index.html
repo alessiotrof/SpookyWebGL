@@ -49,7 +49,8 @@
         varying vec3 v_normal;
         varying vec3 v_surfaceToView;
         varying vec2 v_texcoord;
-
+        varying float v_dist;
+    
         uniform vec3 diffuse;
         uniform vec3 ambient;
         uniform vec3 emissive;
@@ -60,29 +61,44 @@
         uniform vec3 u_ambientLight;
         uniform vec3 u_colorLight;
         uniform sampler2D diffuseMap;
-        uniform float uAlpha; // Aggiunta
-
-        void main () {
+        uniform float uAlpha;      // Aggiunta per la trasparenza
+        uniform vec4 u_fogColor;   // Per la nebbia
+        uniform vec2 u_fogDist;    // Distanza della nebbia (punto di inizio e fine)
+        uniform int u_fogEnabled;  // Per abilitare/disabilitare la nebbia
+    
+        void main() {
             vec3 normal = normalize(v_normal);
-
+    
             vec3 surfaceToViewDirection = normalize(v_surfaceToView);
             vec3 halfVector = normalize(u_lightDirection + surfaceToViewDirection);
-
+    
             float fakeLight = dot(u_lightDirection, normal) * .5 + .5;
             float specularLight = clamp(dot(normal, halfVector), 0.0, 1.0);
-
+    
             vec4 diffuseMapColor = texture2D(diffuseMap, v_texcoord);
             vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb * u_colorLight.rgb;
             float effectiveOpacity = opacity * diffuseMapColor.a;
-
-            gl_FragColor = vec4(
+    
+            // Calcolo del colore senza nebbia
+            vec4 color = vec4(
                 emissive +
                 ambient * u_ambientLight +
                 effectiveDiffuse * fakeLight +
                 specular * pow(specularLight, shininess),
-                uAlpha * effectiveOpacity // Aggiunta
+                uAlpha * effectiveOpacity // Aggiunta per la trasparenza
             );
+    
+            // Calcolo della distanza del frammento dalla vista
+            float distance = length(v_surfaceToView);
+    
+            // Calcolo del fattore di nebbia basato sulla distanza
+            float fogFactor = clamp((u_fogDist.y - distance) / (u_fogDist.y - u_fogDist.x), 0.0, 1.0);
+    
+            // Mescola il colore della nebbia con il colore del frammento se la nebbia è abilitata
+            vec3 foggedColor = mix(u_fogColor.rgb, color.rgb, fogFactor);
+            gl_FragColor = u_fogEnabled == 1 ? vec4(foggedColor, color.a) : color; // Per abilitare/disabilitare la nebbia
         }
+
     </script>
 
     <!-- SKYBOX SHADERS -->
@@ -116,7 +132,7 @@
 
 <body>
 
-    <!-- Noscript section -->
+    <!-- Sezione Noscript -->
     <noscript>
         <div>
             <h2>JavaScript è disabilitato!</h2>
@@ -124,7 +140,7 @@
         </div>
     </noscript>
 
-    <canvas id="gl-canvas" width="1280px" height="720px"></canvas>
+    <canvas id="gl-canvas" width="1000px" height="1000px"></canvas>
     
     <div id="right-panel">
         <h1>Computer Graphics</h1>
@@ -139,34 +155,34 @@
                 Numero di Scheletri: <br>
                 <label for="minSkeletonNumber">Min:</label>
                 <input type="range" class="slider" id="minSkeletonNumber" name="minSkeletonNumber" min="1" max="10" value="2"  step="1" oninput="this.nextElementSibling.value = this.value">
-                <output>5</output><br><br>
+                <output>5</output> <br><br>
                 <label for="maxSkeletonNumber">Max:</label>
                 <input type="range" class="slider" id="maxSkeletonNumber" name="maxSkeletonNumber" min="10" max="20" value="10"  step="1" oninput="this.nextElementSibling.value = this.value">
-                <output>10</output><br><br>
+                <output>10</output> <br><br>
 
                 Numero di Fantasmi: <br>
                 <label for="minGhostNumber">Min:</label>
                 <input type="range" class="slider" id="minGhostNumber" name="minGhostNumber" min="1" max="10" value="2"  step="1" oninput="this.nextElementSibling.value = this.value">
-                <output>5</output><br><br>
+                <output>5</output> <br><br>
                 <label for="maxGhostNumber">Max:</label>
                 <input type="range" class="slider" id="maxGhostNumber" name="maxGhostNumber" min="10" max="20" value="10"  step="1" oninput="this.nextElementSibling.value = this.value">
-                <output>10</output><br><br>
+                <output>10</output> <br><br>
                 
                 Numero di Tombe: <br>
                 <label for="minTombstoneNumber">Min:</label>
                 <input type="range" class="slider" id="minTombstoneNumber" name="minTombstoneNumber" min="1" max="15" value="5"  step="1" oninput="this.nextElementSibling.value = this.value">
-                <output>10</output><br><br>
+                <output>10</output> <br><br>
                 <label for="maxTombstoneNumber">Max:</label>
                 <input type="range" class="slider" id="maxTombstoneNumber" name="maxTombstoneNumber" min="15" max="20" value="15"  step="1" oninput="this.nextElementSibling.value = this.value">
-                <output>15</output><br><br>
+                <output>15</output> <br><br>
 
                 Numero di Alberi: <br>
                 <label for="minTreeNumber">Min:</label>
                 <input type="range" class="slider" id="minTreeNumber" name="minTreeNumber" min="1" max="10" value="5"  step="1" oninput="this.nextElementSibling.value = this.value">
-                <output>5</output><br><br>
+                <output>5</output> <br><br>
                 <label for="maxTreeNumber">Max:</label>
                 <input type="range" class="slider" id="maxTreeNumber" name="maxTreeNumber" min="10" max="15" value="10"  step="1" oninput="this.nextElementSibling.value = this.value">
-                <output>10</output><br><br>
+                <output>10</output> <br><br>
                 
                 <button type="button" class="button" onclick="processLandscapeSettings()">Applica</button>
             </form>
@@ -214,7 +230,22 @@
         <div id="graphics">
             <h2>Grafica</h2>
             <label for="transparency">Trasparenza: </label>
-            <input type="checkbox" class="checkbox" id="transparencyCheckbox" checked onchange="processCheckbox()">
+            <input type="checkbox" class="checkbox" id="transparencyCheckbox" checked > <br>
+
+            <label for="fog">Nebbia: </label>
+            <input type="checkbox" class="checkbox" id="fogCheckbox" checked > <br>
+
+            <label for="fogColorPicker">Colore Nebbia:</label> 
+            <input type="color" class="color-picker" id="fogColorPicker" value="#FFFFFF" /> <br>
+
+            <label for="fogStart">Fog Start:</label>
+            <input type="range" class="slider" id="fogStart" min="1" max="50" step="1" value="5" oninput="this.nextElementSibling.value = this.value"/> 
+            <output>5</output> <br>
+
+            <label for="fogEnd">Fog End:</label>
+            <input type="range" class="slider" id="fogEnd" min="50" max="100" step="1" value="50" oninput="this.nextElementSibling.value = this.value"/> 
+            <output>50</output> <br>
+
         </div>
 
         <div id="camera">
@@ -234,7 +265,7 @@
 
 </body>
 
-<!-- Utility -->
+<!-- Librerie -->
 <script src="./js/libs/dat.gui.js"></script>
 <script src="./js/libs/glm_utils.js"></script>
 <script src="./js/libs/jquery-3.6.0.js"></script>
@@ -243,7 +274,7 @@
 <script src="./js/libs/mesh_utils.js"></script>
 <script src="./js/libs/webgl-utils.js"></script>
 
-<!-- Script principali -->
+<!-- Script custom -->
 <script src="./js/settings.js"></script>
 <script src="./js/camera.js"></script>
 <script src="./js/skybox.js"></script>

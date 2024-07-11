@@ -16,7 +16,7 @@ class Model {
 
         // Caricate da loadMesh()
         this.positionsLoaded = [];
-        this.normalsLoaded= [];
+        this.normalsLoaded = [];
         this.texcoordsLoaded = [];
         this.textureLoaded = null;
         this.numVerticesLoaded = 0;
@@ -99,11 +99,14 @@ function drawModel(model) {
     gl.uniform3fv(gl.getUniformLocation(program, "emissive"), model.emissive);
     gl.uniform1f(gl.getUniformLocation(program, "shininess"), model.shininess);
     gl.uniform1f(gl.getUniformLocation(program, "opacity"), model.opacity);
+
+    // Trasparenza
     if(model.sourceMesh.includes("ghost") && document.getElementById('transparencyCheckbox').checked) { // Trasparenza
         gl.uniform1f(gl.getUniformLocation(program, "uAlpha"), 0.35);
     } else {
         gl.uniform1f(gl.getUniformLocation(program, "uAlpha"), 1.0);
     }
+
 
 
     // Bind position buffer
@@ -160,7 +163,7 @@ function createModelCopies(modelPath, modelList, minCopies, maxCopies) {
 
     const numCopies = Math.floor(Math.random() * (maxCopies - minCopies + 1)) + minCopies;
     const maxAttempts = 40;
-    const placementRange = 26; // In questo caso c'è un range che va da 0 a 28
+    const placementRange = 26; // In questo caso c'è un range che va da 0 a 26
 
     console.log(modelPath + ": numero copie " + minCopies);
 
@@ -182,6 +185,7 @@ function createModelCopies(modelPath, modelList, minCopies, maxCopies) {
                 [1.0, 1.0, 1.0]
             );
 
+            // Controllo se fa collisione con un altro modello della lista
             collision = checkCollision(newModel, modelList);
             if (!collision) {
                 modelList.push(newModel);

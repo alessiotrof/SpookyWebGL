@@ -1,35 +1,40 @@
-// Script per la gestione degli input
+//
+// Controls.js
+//
 
+// Inizializzo gli event handlers
 function initControls() {
 
-    // Event listeners for keyboard
+    // Event listeners per la tastiera
     window.addEventListener("keydown", doKeyDown, true);
     window.addEventListener("keyup", doKeyUp, true);
 
-    // Togliere i commenti qui sotto per provare le funzioni del touch handlers
-    // canvas.addEventListener('touchstart', handleTouchStart, false);
-    // canvas.addEventListener('touchmove', (e) => handleTouchMove(e, canvas, camera), false);
-    // canvas.addEventListener('touchend', handleTouchEnd, false);
-    // canvas.addEventListener('mouseout', handleTouchEnd, false);
-
-    canvas.addEventListener('touchstart', handleMouseDown, false);
-    canvas.addEventListener('touchmove', handleMouseMove, false);
-    canvas.addEventListener('touchend', handleMouseUp, false);
-    canvas.addEventListener('mouseout', handleMouseUp, false);
-
-    // Event listeners for mouse
+    // Event listeners per il mouse
     canvas.addEventListener('mousedown', handleMouseDown, false);
     canvas.addEventListener('mouseup', handleMouseUp, false);
     canvas.addEventListener('mousemove', handleMouseMove, false);
     canvas.addEventListener('mouseout', handleMouseUp, false);
 
-    // Event listeners per le frecce a schermo
+    // Event listeners per il touch
+    canvas.addEventListener('touchstart', handleTouchStart, false);
+    canvas.addEventListener('touchmove', handleTouchMove, false);
+    canvas.addEventListener('touchend', handleTouchEnd, false);
+    canvas.addEventListener('mouseout', handleTouchEnd, false);
+
+
+    // Event listeners per le frecce virtuali presenti nella pagina web
     document.getElementById('up-button').addEventListener('click', () => camera.moveForward(0.2));
     document.getElementById('down-button').addEventListener('click', () => camera.moveForward(-0.2));
     document.getElementById('left-button').addEventListener('click', () => camera.moveRight(-0.2));
     document.getElementById('right-button').addEventListener('click', () => camera.moveRight(0.2));
     document.getElementById('center-button').addEventListener('click', () => camera.reset());
 }
+
+
+//
+// MOUSE
+//
+
 
 const mouse = {
     drag: false,
@@ -42,12 +47,10 @@ function handleMouseDown(e) {
     mouse.oldX = e.pageX;
     mouse.oldY = e.pageY;
     e.preventDefault();
-    //console.log("Pressed a mouse button!");
 }
 
 function handleMouseUp() {
     mouse.drag = false;
-    //console.log("Released a mouse button!");
 }
 
 function handleMouseMove(e) {
@@ -65,13 +68,21 @@ function handleMouseMove(e) {
     e.preventDefault();
 }
 
+
+//
+// TOUCH
+//
+
+
 function handleTouchStart(e) {
+
     if (e.touches.length == 1) {
         const touch = e.touches[0];
         mouse.drag = true;
         mouse.oldX = touch.pageX;
         mouse.oldY = touch.pageY;
     }
+
     e.preventDefault();
 }
 
@@ -95,16 +106,20 @@ function handleTouchEnd() {
     mouse.drag = false;
 }
 
+
+
+//
+// TASTIERA
+//
+
 var keys = [];
 
 function doKeyDown(e) {
     keys[e.key] = true;
-    //console.log("Pressed a key!");
 }
 
 function doKeyUp(e) {
     keys[e.key] = false;
-    //console.log("Released a key!");
 }
 
 function moveCameraWithKeyboard() {
