@@ -1,4 +1,4 @@
-Modelli:
+Models:
 
 https://opengameart.org/content/space-skybox-1
 https://sketchfab.com/3d-models/tombstone-6ff9cc405b3748f18d4c55803d242c15
