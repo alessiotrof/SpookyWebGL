@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="it">
+
+    <head>
+        <title>Report Progetto WebGL - Alessio Troffei</title>
+
+        <!-- Meta info -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+
+        <!-- FavIcon-->
+        <link rel="icon" type="image/x-icon" href="../project/assets/icons/favicon.png">
+
+        <!-- CSS -->
+        <link rel="stylesheet" type="text/css" href="report.css">
+
+    </head>
+
+    <body>
+    
+
+
+        <p class="header" id="intestazione"><b>Relazione per il progetto di "Computer Graphics A.A. 2023-2024"</b><br> 
+            <b>Alessio Troffei - 0001094922</b> <br>
+            <b>Laurea Magistrale in Ingegneria Informatica A.A. 2023-2024</b> </p>
+        
+
+
+        
+        <div>
+            <br><br> <p class="section" id="indice"></a>Indice </p>
+            <ul>
+                <li><a href="#introduzione">Introduzione</a></li>
+                <li><a href="#struttura">Struttura del progetto</a></li>
+                <li><a href="#interfaccia">Interfaccia utente</a></li>
+                <li><a href="#script">Script principali</a></li>
+                <ul>
+                    <li><a href="#main">main.js </a></li>
+                    <li><a href="#camera">camera.js </a></li>
+                    <li><a href="#model">model.js </a></li>
+                    <li><a href="#skybox">skybox.js </a></li>
+                    <li><a href="#settings">settings.js </a></li>
+                </ul>
+                <li><a href="#particolarita">Particolarità</a></li>
+                <li><a href="#riferimenti">Riferimenti</a></li>
+        </div>
+
+
+
+
+        <div> 
+            <br><br> <p class="section" id="introduzione"></a>Introduzione </p>
+            Questo è il progetto sviluppato per l'esame di "Computer Graphics A.A. 2023-2024". <br>
+            L'obiettivo è quello di creare uno scenario "horror" (in questo caso un cimitero) in cui l'utente può modificare a proprio piacimento gli elementi del paesaggio. 
+            Questi ultimi vengono posizionati proceduralmente nella scena 3D tramite un semplice algoritmo, in modo da offrire una vasta gamma di paesaggi sempre diversi. <br>
+            I modelli .obj sono stati realizzati o modificati con Blender, mentre il loro caricamento e visualizzazione è stato realizzato con la libreria WebGL. 
+        </div>
+
+
+
+
+        <div> 
+            <br><br> <p class="section" id="struttura"></a>Struttura del Progetto </p>
+            <p>Il progetto è costituito dalle seguenti cartelle e file:
+                <ul>
+                    <li> <b> <i>doc</i></b>: è la cartella che contiene la documentazione del progetto. </li>
+                    <li> <b> <i>project</i> </b>: è la cartella che contiene il codice del progetto ed è strutturata nel seguente modo: 
+                        <ul>
+
+                            <li> <b> <i>assets: </i> </b> contiene altre sotto-cartelle che ospitano i modelli/texture e le icone del progetto. </li>
+                            <ul>
+                                <li> <b> <i>icons: </i> </b> contiene le icone del sito (favicon). </li>
+                                <li> <b> <i>models: </i> </b> contiene tutti i modelli in formato .obj con le relative texture. Ognuno di essi ha la sua cartella separata. </li>
+                            </ul>
+                            <li> <b> <i>js: </i> </b> è la cartella principale in cui sono mantenuti tutti i file JavaScript del progetto. Contiene a sua volta altre cartelle. </li>
+                            
+                            <ul>
+                                <li> <b> <i>libs: </i> </b> contiene le librerie già disponibili (alcune modificate) per facilitare l'implementazione delle varie funzioni del progetto. </li>
+                                <li><b><i><code>main.js</code></i></b> è il file principale, contiene il codice di inizializzazione della grafica, l'applicazione delle impostazioni scelte, il ciclo di rendering, i vari effetti quali la nebbia.</li>
+                                <li><b><i><code>camera.js</code></i></b> contiene la logica per l'implementazione della camera in prima persona.</li>
+                                <li><b><i><code>controls.js</code></i></b> contiene la logica per l'implementazione dell'input utente e per il disegno del Canvas 2D contenente i comandi virtuali.</li>
+                                <li><b><i><code>model.js</code></i></b> contiene come vengono gestiti i vari modelli e le loro proprietà. Contiene anche la logica per il posizionamento procedurale degli stessi.</li>
+                                <li><b><i><code>settings.js</code></i></b> contiene la logica relativa all'applicazione delle impostazioni del posizionamento dei modelli nel paesaggio.</li>
+                                <li><b><i><code>skybox.js</code></i></b> contiene la logica per l'implementazione dello skybox.</li>
+                                <li><b><i><code>utils.js</code></i></b> contiene varie utility per il progetto, come funzioni di conversione o di adattamento del Canvas allo schermo.</li>
+                            </ul>
+                        </ul>
+                    </li>
+                </ul>
+        </div>
+
+
+
+
+        <div> 
+            <br><br> <p class="section" id="interfaccia"></a>Interfaccia Utente</p>
+
+            <br><h2>Interfaccia Desktop:</h2>
+            <img src="./imgs/interfaccia_pc.png" alt="Interfaccia Utente PC" width="1200" height="600">
+
+            <p>L'interfaccia è suddivisa in varie sezioni che permettono di modificare diversi aspetti del paesaggio e dei parametri grafici:</p>
+            
+            <br><h2>Schermata Principale</h2>
+            La parte principale dell'interfaccia mostra il paesaggio (un cimitero) con modelli di alberi, scheletri, tombe e fantasmi.
+            Qui l'utente può osservare la scena renderizzata in tempo reale grazie a WebGL e muoversi interagendo coi bottoni/mouse.
+            
+            <br><h2>Opzioni di Generazione del Paesaggio</h2>
+            Questa sezione permette di modificare il numero minimo e massimo degli elementi del paesaggio tramite slider/checkbox:
+            <ul>
+                <li><strong>Numero di Scheletri</strong>: Regola il numero minimo e massimo di scheletri visualizzati.</li>
+                <li><strong>Numero di Fantasmi</strong>: Regola il numero minimo e massimo di fantasmi visualizzati.</li>
+                <li><strong>Numero di Tombe</strong>: Regola il numero minimo e massimo di tombe visualizzate.</li>
+                <li><strong>Numero di Alberi</strong>: Regola il numero minimo e massimo di alberi visualizzati.</li>
+                <li><strong>Tombe con Nome</strong>: Permette di generare o meno delle tombe con dei nomi sopra (compresa quella dell'autore, come richiesta dalla traccia del progetto).</li>
+            </ul>
+            
+            <br><h2>Impostazioni della Luce</h2>
+            Qui l'utente può regolare le due luci presenti nella scena, ovvero la Ambient Light e la Directional Light.
+            <ul>
+                <li><strong>Colore Ambient Light</strong>: Permette di selezionare il colore della Ambient Light.</li>
+                <li><strong>Colore Directional Light</strong>: Permette di selezionare il colore della Directional Light.</li>
+                <li><strong>Directional Light X, Y, Z</strong>: Serie di slider che regolano la direzione della Directional Light.</li>
+            </ul>
+            
+            <br><h2>Impostazioni Grafiche</h2>
+            Qui è possibile modificare le opzioni grafiche avanzate.
+            <ul>
+                <li><strong>Trasparenza</strong>: Permette di attivare o disattivare la trasparenza (visibile nei fantasmi).</li>
+                <li><strong>Nebbia</strong>: Permette di attivare o disattivare l'effetto nebbia.</li>
+                <li><strong>Colore Nebbia</strong>: Permette di selezionare il colore della nebbia.</li>
+                <li><strong>Inizio Nebbia</strong>: Slider che regola il punto in cui la nebbia inizia ad essere visibile.</li>
+                <li><strong>Fine Nebbia</strong>: Slider che regola la distanza dove la nebbia andrà completamente a nascondere un oggetto in lontananza.</li>
+            </ul>
+            
+            <br><h2>Controlli della Camera</h2>
+            Anche la camera ha delle sue opzioni regolabili. <br>
+            <li><strong>FOV</strong>: Slider che regola il campo visivo della camera.</li>
+            
+            <br><h2>Controlli a Schermo</h2>
+            I pulsanti virtuali qui presenti sono stati realizzati usando un Canvas 2D e permettono di spostarsi all'interno del paesaggio.
+
+            <br><br><h2>Interfaccia Mobile:</h2>
+            <img src="./imgs/interfaccia_mobile.png" alt="Interfaccia Utente Mobile" width="300" height="500"><br>
+            Come richiesto dalla traccia del progetto, l'interfaccia è stata completamente adattata anche per dispositivi mobili.
+            L'utente può controllare la telecamera tramite il touchscreen del telefono, e può muoversi mediante il Canvas 2D che mostra i comandi virtuali.
+
+        </div>
+
+
+
+
+        <div>
+            <br><br><p class="section" id="script">Script</p>
+            Qui vengono descritti gli script che compongono il progetto. Ecco un elenco di quelli principali:
+            <ul>
+                <li><a href="#main"><b><code>main.js</code></b></a></li>
+                <li><a href="#camera"><b><code>camera.js</code></b></a></li>
+                <li><a href="#model"><b><code>model.js</code></b></a></li>
+                <li><a href="#skybox"><b><code>skybox.js</code></b></a></li>
+                <li><a href="#controls"><b><code>controls.js</code></b></a></li>
+                <li><a href="#utils"><b><code>utils.js</code></b></a></li>
+                <li><a href="#settings"><b><code>settings.js</code></b></a></li>
+            </ul>
+        </div>
+
+
+
+
+        <div> 
+            <br><br> <p class="section" id="main"></a>main.js</p>
+            Questo script è il cuore del progetto, va a gestire molte cose tra cui:
+            <ul>
+                <li>L'inizializzazione di WebGL; </li>
+                <li>Configurazione delle luci, skybox e modelli; </li>
+                <li>Resa grafica della scena tramite il ciclo di rendering. </li>
+            </ul>
+
+            <br><h2>Funzioni principali:</h2>
+            <h2><code>main()</code></h2>
+            <ul>
+                <li>Avvia il programma e inizializza WebGL.</li>
+                <li>Configura gli shader e lo skybox.</li>
+                <li>Carica e configura i modelli 3D basandosi sui valori letti dall'interfaccia utente.</li>
+                <li>Inizializza la camera e i controlli.</li>
+                <li>Inizia il ciclo di rendering.</li>
+            </ul>
+
+            <h2><code>initWebGL()</code></h2>
+            <ul>
+                <li>Ottiene il contesto WebGL dal Canvas.</li>
+                <li>Verifica il supporto per WebGL e abilita le funzionalità necessarie.</li>
+                <li>Imposta il viewport per utilizzare l'intera area del Canvas.</li>
+            </ul>
+
+            <h2><code>updateFog() e updateLights() </code></h2>
+            <ul>
+                <li>Aggiornano i parametri della nebbia e luci nella scena.</li>
+                <li>Impostano il colore e la direzione delle luci ambientali e direzionali.</li>
+            </ul>
+
+            <h2><code>createCameraViewMatrix() e createProjectionMatrix() </code></h2>
+            <ul>
+                <li>Creano e impostano la matrice di vista della camera.</li>
+                <li>Calcolano e impostano la matrice di proiezione prospettica.</li>
+            </ul>
+
+            <h2><code>renderLoop()</code></h2>
+            <ul>
+                <li>Gestisce il ciclo di rendering.</li>
+                <li>Aggiorna le dimensioni del Canvas e pulisce i buffer.</li>
+                <li>Aggiorna la nebbia e le luci nella scena.</li>
+                <li>Renderizza lo skybox e i modelli 3D.</li>
+            </ul>  
+            
+        </div>
+
+
+
+
+        <div> 
+            <br><br> <p class="section" id="camera"></a>camera.js</p>
+            Questo script permette di creare una telecamera in prima persona. <br>
+            È progettato per gestire la visualizzazione di una scena 3D dal punto di vista della camera che può muoversi e ruotare come se fosse controllata da un utente in prima persona. <br>
+        
+    
+            <br><h2>Classe <code>Camera</code></h2>
+            <ul>
+                <li>Costruttore: Inizializza la posizione della camera, la direzione verso cui guarda (forward) e le direzioni verso destra (right) e verso l'alto (up).</li>
+            </ul>
+
+            <br><h3>Funzioni di Rotazione della Camera</h3>
+            <ul>
+                <li><code>rotateUp()</code>: Ruota la camera verso l'alto o verso il basso attorno all'asse destro (right).</li>
+                <li><code>rotateLeft()</code>: Ruota la camera verso sinistra o verso destra attorno all'asse verso l'alto (up).</li>
+            </ul>
+
+            <br><h3>Funzioni di Movimento</h3>
+            <ul>
+                <li><code>moveForward()</code>: Muove la camera avanti o indietro lungo la direzione verso cui guarda (forward).</li>
+                <li><code>moveRight()</code>: Muove la camera orizzontalmente lungo la direzione destra (right).</li>
+                <li><code>moveUp()</code>: Muove la camera verso verticalmente lungo la direzione verso l'alto (up).</li>
+            </ul>
+
+            <br><h3>Funzioni Ausiliarie</h3>
+            <ul>
+                <li><code>reset()</code>: Resetta l'orientamento della camera alla posizione iniziale, mantenendo la stessa posizione nello spazio.</li>
+                <li><code>getViewMatrix()</code>: Calcola e restituisce la matrice di vista della camera, necessaria per il rendering della scena 3D.</li>
+                <li><code>getPosition()</code>: Restituisce la posizione attuale della camera.</li>
+            </ul>
+
+            <br><h2>Funzione <code>initCamera()</code></h2>
+            <ul>
+                <li>Inizializza la camera con una posizione predefinita e la direzione verso cui guarda.</li>
+                <li>Imposta la camera come nuova istanza della classe <code>Camera</code> con i parametri di posizione, lookAt e up specificati.</li>
+            </ul>
+            <img src="./imgs/camera.gif" alt="Camera" width="480" height="260">
+            
+        </div>
+
+
+
+
+        <div> 
+            <br><br> <p class="section" id="model"></a>model.js</p>
+            Questo script è progettato per gestire la creazione, configurazione e rendering dei modelli 3D nella scena. <br>
+            
+            <br><h2>Classe <code>Model</code></h2>
+            <ul>
+                <li>Costruttore: Inizializza il modello con posizione, rotazione e scala predefinite. Carica la mesh dal file e configura i buffer necessari.</li>
+            </ul>
+
+            <h3><code>init()</code></h3>
+            <ul>
+                <li>Carica la mesh dal file e riempie i buffer di posizione, normali e coordinate delle texture.</li>
+            </ul>
+
+            <br><h2>Funzioni per la Creazione e il Disegno del Modello</h2>
+            <h3><code>createModelTransformationMatrix()</code></h3>
+            <ul>
+                <li>Crea la matrice di trasformazione per il modello, applicando traslazione, rotazione e scala.</li>
+            </ul>
+
+            <h3><code>createModelBuffers()</code></h3>
+            <ul>
+                <li>Configura i buffer di posizione, normali e coordinate di texture per il modello.</li>
+            </ul>
+
+            <h3><code>drawModel()</code></h3>
+            <ul>
+                <li>Imposta le uniform del materiale del modello.</li>
+                <li>Gestisce la trasparenza se il modello è un fantasma.</li>
+                <li>Configura e abilita i buffer di posizione, normali e coordinate di texture.</li>
+                <li>Disegna il modello.</li>
+            </ul>
+
+            <br><h2>Funzioni per il Caricamento dei Modelli</h2>
+            <h3><code>checkCollision()</code></h3>
+            <ul>
+                <li>Verifica se un nuovo modello si sovrappone ad uno dei modelli esistenti, evitando collisioni.</li>
+            </ul>
+
+            <h3><code>createModelCopies()</code></h3>
+            <ul>
+                <li>Crea copie di un modello specifico, posizionandole in modo casuale nella scena.</li>
+                <li>Controlla le collisioni e tenta di riposizionare il modello se necessario.</li>
+                <li>È stato impostato un numero massimo di tentativi per il posizionamento casuale del modello, in modo da evitare loop infiniti.</li>
+            </ul>
+
+            <h3><code>createModels()</code></h3>
+            <ul>
+                <li>Crea una lista di tutti i modelli necessari per la scena: terreno, paesaggio, alberi, tombe, scheletri e fantasmi.</li>
+                <li>Ogni modello (eccetto il terreno e il paesaggio) ha due varianti distinte che vengono scelte casualmente.</li>
+                <li>Vengono quindi distribuiti i modelli in modo casuale tra le varianti.</li>
+                <li>Controlla le collisioni.</li>
+            </ul>
+            <img src="./imgs/modello.png" alt="Modello Scheletro" width="200" height="200">
+        </div>
+
+
+
+
+        <div> 
+            <br><br> <p class="section" id="skybox"></a>skybox.js</p>
+            Questo script gestisce la creazione, configurazione e rendering dello skybox. <br>
+            <br><h2>Classe <code>Skybox</code></h2>
+            <ul>
+                <li>Costruttore: Inizializza lo skybox con le texture fornite e configura i buffer necessari.</li>
+            </ul>
+
+            <h3><code>init()</code></h3>
+            <ul>
+                <li>Inizializza i buffer delle posizioni e le texture dello skybox.</li>
+            </ul>
+
+            <br><h2>Funzioni per la Creazione e il Disegno dello Skybox</h2>
+            <h3><code>createSkyboxBuffers()</code></h3>
+            <ul>
+                <li>Configura il buffer delle posizioni per lo skybox.</li>
+                <li>Crea e configura le texture per ogni faccia del cubo dello skybox.</li>
+                <li>Carica le immagini delle texture in modo asincrono e genera le mipmaps per migliorare la qualità della texture.</li>
+            </ul>
+
+            <h3><code>drawSkybox()</code></h3>
+            <ul>
+                <li>Imposta la funzione di profondità per disegnare lo skybox correttamente.</li>
+                <li>Calcola e imposta la matrice di vista inversa per lo shader dello skybox.</li>
+                <li>Configura e abilita i buffer di posizioni.</li>
+                <li>Disegna il cubo dello skybox.</li>
+            </ul>
+
+            <h3><code>initSkybox()</code></h3>
+            <ul>
+                <li>Inizializza l'oggetto skybox con le texture specificate per ogni faccia del cubo.</li>
+            </ul>
+
+            <img src="./imgs/skybox_cube.png" alt="Cubo Skybox" width="250" height="250"><br>
+        </div>
+
+
+
+
+        
+        <div> 
+            <br><br><p class="section" id="controls"></a>controls.js</p>
+            Permette la gestione dell'interazione utente tramite tastiera, mouse, touch e pulsanti virtuali su un Canvas. <br>
+            
+            <br><h2>Inizializzazione dei Controlli</h2>
+            <p>La funzione <code>initControls()</code> inizializza gli event handler per diversi tipi di input:</p>
+            <ul>
+                <li><strong>Tastiera:</strong> Aggiunge event listener per gli eventi <code>keydown</code> e <code>keyup</code>.</li>
+                <li><strong>Mouse:</strong> Aggiunge event listener per gli eventi <code>mousedown</code>, <code>mouseup</code>, <code>mousemove</code> e <code>mouseout</code> sul Canvas.</li>
+                <li><strong>Touch:</strong> Aggiunge event listener per gli eventi <code>touchstart</code>, <code>touchmove</code>, <code>touchend</code> e <code>mouseout</code> sul Canvas.</li>
+                <li><strong>Pulsanti Virtuali:</strong> Aggiunge un event listener per il Canvas dei comandi virtuali, gestendo i click sui pulsanti disegnati.</li>
+            </ul>
+
+            <br><h2>Controllo del Mouse</h2>
+            <ul>
+                <li><code>handleMouseDown()</code>: Attiva la modalità di trascinamento e memorizza la posizione iniziale del mouse.</li>
+                <li><code>handleMouseUp()</code>: Disattiva la modalità di trascinamento.</li>
+                <li><code>handleMouseMove()</code>: Se la modalità di trascinamento è attiva, calcola il movimento del mouse e ruota la camera di conseguenza.</li>
+            </ul>
+
+            <br><h2>Controllo Touch</h2>
+            <ul>
+                <li><code>handleTouchStart()</code>: Attiva la modalità di trascinamento touch e memorizza la posizione iniziale del touch.</li>
+                <li><code>handleTouchMove()</code>: Se la modalità di trascinamento touch è attiva e c'è un singolo touch, calcola il movimento del touch e ruota la camera di conseguenza.</li>
+                <li><code>handleTouchEnd()</code>: Disattiva la modalità di trascinamento touch.</li>
+            </ul>
+
+            <br><h2>Controllo della Tastiera</h2>
+            <ul>
+                <li><code>doKeyDown()</code>: Memorizza lo stato di pressione di un tasto.</li>
+                <li><code>doKeyUp()</code>: Memorizza lo stato di rilascio di un tasto.</li>
+                <li><code>moveCameraWithKeyboard()</code>: Controlla lo stato dei tasti e muove o ruota la camera in base ai tasti premuti.</li>
+            </ul>
+
+            <br><h2>Comandi Virtuali su Canvas</h2>
+            <p>Lo script disegna pulsanti virtuali su un canvas 2D per fornire un'interfaccia di controllo alternativa per dispositivi mobili:</p>
+            <ul>
+                <li><code>drawCommands()</code>: Disegna i pulsanti di movimento (su, giù, sinistra, destra) e il pulsante per il reset della camera (al centro) sul Canvas.</li>
+                <li><code>drawButton()</code>: Disegna un singolo pulsante sul Canvas.</li>
+                <li><code>handleButtonClick()</code>: Gestisce i click sui pulsanti del Canvas e muove o resetta la camera in base al pulsante cliccato.</li>
+                <li><code>isInsideButton()</code>: Verifica se un click è stato effettuato all'interno di un pulsante.</li>
+            </ul>
+            <img src="./imgs/canvas2d.png" alt="Canvas 2D" width="200" height="200">
+            
+        </div>
+
+
+
+        <div> 
+            <br><br> <p class="section" id="utils"></a>utils.js</p>
+            Lo script include una serie di funzioni utili per le conversioni matematiche e grafiche utilizzate nel contesto WebGL. <br>
+
+            <br><h2>Funzioni di Conversione</h2>
+            <h2><code>degToRad()</code></h2>
+            <ul>
+                <li>Converte un angolo da gradi a radianti.</li>
+            </ul>
+
+            <h2><code>radToDeg()</code></h2>
+            <ul>
+                <li>Converte un angolo da radianti a gradi.</li>
+            </ul>
+
+            <h2><code>isPowerOf2()</code></h2>
+            <ul>
+                <li>Verifica se un valore è una potenza di 2.</li>
+            </ul>
+
+            <h2><code>hexToRgbArray()</code></h2>
+            <ul>
+                <li>Converte un valore colore esadecimale in un array RGB normalizzato.</li>
+                <li>Estrae e normalizza i componenti rosso, verde e blu.</li>
+                <li>Restituisce un array con i valori RGB.</li>
+            </ul>
+
+            <br><h2>Funzioni di Adattamento</h2>
+            <h2><code>resizeCanvasToDisplaySize()</code></h2>
+            <ul>
+                <li>Adatta le dimensioni del Canvas alle dimensioni di visualizzazione del browser.</li>
+                <li>Controlla se le dimensioni del Canvas sono diverse da quelle visualizzate.</li>
+                <li>Ridimensiona il Cavas se necessario.</li>
+            </ul>
+        </div>
+
+        
+
+
+        <div> 
+            <br><br> <p class="section" id="settings"></a>settings.js</p>
+            Gestisce le impostazioni per la generazione del paesaggio di una scena 3D, permettendo all'utente di configurare il numero di vari elementi come scheletri, fantasmi, tombe e alberi. <br>
+
+            <br><h2>Funzioni di Applicazione delle Impostazioni</h2>
+            <h2><code>processLandscapeSettings()</code></h2>
+            <ul>
+                <li>Questa funzione viene chiamata quando l'utente preme il pulsante "Applica".</li>
+                <li>Recupera i valori dagli input dell'interfaccia utente e chiama la funzione <code>createModels()</code> per generare i modelli 3D basati sui valori delle impostazioni.</li>
+            </ul>
+
+            <br>Ovviamente le impostazioni richiedono del tempo per essere applicate, in quanto viene richiesto un nuovo rendering dell'intera scena 3D.
+            <img src="./imgs/impostazioni.png" alt="Applicazione delle Impostazioni" width="1200" height="600">
+
+        </div>
+
+
+
+
+        <div> 
+            <br><br> <p class="section" id="particolarita"></a>Particolarità</p>
+            Il progetto utilizza effetti ed elementi di rendering avanzati tra cui:
+            <ul>
+                <li>Nebbia</li>
+                <li>Trasparenza</li>
+                <li>Skybox</li>
+            </ul>
+            Di seguito viene fornita una spiegazione dettagliata di ognuno.
+            
+            <br><br> <h2>Nebbia</h2>
+            La nebbia simula l'attenuazione dei colori con la distanza. Nel progetto è stata implementata nel fragment shader e può essere abilitata o disabilitata dinamicamente.
+            Per fare questo si utilizzando le Variabili Uniform:
+            <ul>
+                <li><code>u_fogColor</code>: Colore della nebbia.</li>
+                <li><code>u_fogDist</code>: Distanza della nebbia, che definisce i punti di inizio e fine della transizione della nebbia.</li>
+                <li><code>u_fogEnabled</code>: Variabile che abilita o disabilita l'effetto nebbia.</li>
+            </ul>
+
+            <h3>Funzionamento:</h3>
+            <ul>
+                <li>Viene calcolata la distanza del fragment dalla vista.</li>
+                <li>Il colore del frammento viene poi mescolato con il colore della nebbia creando così un effetto di dissolvenza (che varia in base alla distanza).
+                    Viene così creata una transizione graduale che rende gli oggetti più lontani meno visibili.</li>
+            </ul>
+            <img src="./imgs/nebbia.gif" alt="Aumento della nebbia" width="480" height="260">
+
+            <br> <h2>Trasparenza</h2>
+            L'effetto di trasparenza è implementato nel fragment shader utilizzando una variabile uniform <code>uAlpha</code>. che determina il livello di trasparenza del materiale. <br>
+
+            <h3>Funzionamento:</h3>
+            Per i modelli che richiedono trasparenza, come i fantasmi, la variabile uAlpha viene impostata a un valore inferiore a 1.0 (nel progetto è a 0.35).
+            Il valore uAlpha viene quindi moltiplicato all'effectiveOpacity dell'oggetto nel fragment shader.
+            Alla chiamata della funzione <code>drawModel()</code>, viene passato uAlpha pari a 0.35 se la trasparenza è abilitata, 1.0 altrimenti.
+            <img src="./imgs/trasparenza.gif" alt="Trasparenza attivata/disattivata" width="300" height="260">
+
+            <br><br> <h2>Skybox</h2>
+            Lo skybox è un cubo virtuale che circonda la scena e simula un ambiente lontano e distante, come il cielo o un paesaggio. Nel progetto, lo skybox è stato implementato utilizzando uno script specifico (si veda <a href="#skybox"><b><code>skybox.js</code></b></a>) e dispone di un fragment shader e vertex shader appropriato.
+            Da notare nel fragment shader l'uso delle texture cubiche (samplerCube). Ciò consente di mappare immagini differenti su ciascuna delle sei facce del cubo stesso, creando un ambiente tridimensionale che appare continuo e privo di interruzioni (come un cielo notturno).
+            <img src="./imgs/skybox.png" alt="Skybox" width="480" height="260">
+        </div>
+
+
+
+        <div> 
+            <br><br> <p class="section" id="riferimenti"></a>Riferimenti</p>
+            <a href="https://webglfundamentals.org/" target="_blank">webglfundamentals.org/</a>
+
+        </div>
+
+
+    </body>
+
+
+</html>
