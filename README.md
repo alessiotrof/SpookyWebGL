@@ -2,10 +2,10 @@
 
 
 ### Overview
-This WEBGL project allows users to procedurally generate a cemetery scene with various 3D models placed automatically according to predefined rules and patterns.
+This WebGL project allows users to procedurally generate a cemetery scene with various 3D models placed automatically according to predefined rules and patterns.
 
 ### Features
-- **Procedural Model Placement:** Automatically places gravestones, ghosts and other cemetery-related objects in the scene.
+- **Procedural Model Placement:** Automatically places gravestones, ghosts and other objects in the scene.
 - **Customizable Parameters:** Users can adjust parameters such as the density of objects, types of models used, and overall layout to create diverse cemetery environments.
 - **Dynamic Rendering:** As objects are placed, the scene updates in real-time to reflect changes, ensuring an immersive and responsive experience.
 
