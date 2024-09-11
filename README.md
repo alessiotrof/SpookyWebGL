@@ -4,7 +4,7 @@
 ### Overview
 This WebGL project allows users to procedurally generate a cemetery scene with various 3D models placed automatically according to predefined rules and patterns.
 
-![alt text](https://github.com/alessiotrof/SpookyWebGL/blob/main/doc/imgs/interfaccia_pc.png?raw=true)
+![Screenshot](https://github.com/alessiotrof/SpookyWebGL/blob/main/doc/imgs/interfaccia_pc.png?raw=true)
 
 ### Features
 - **Procedural Model Placement:** Automatically places gravestones, ghosts and other objects in the scene.
